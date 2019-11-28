@@ -1,0 +1,4 @@
+E:\e\R&D\myajax_library\SmartAjax\bin\Debug\Ajax.dll
+E:\e\R&D\myajax_library\SmartAjax\bin\Debug\Ajax.pdb
+E:\e\R&D\myajax_library\SmartAjax\obj\Debug\Ajax.dll
+E:\e\R&D\myajax_library\SmartAjax\obj\Debug\Ajax.pdb
