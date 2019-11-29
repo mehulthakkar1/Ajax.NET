@@ -1,5 +1,0 @@
-C:\Mehul\rnd\Ajax.Net\bin\Debug\Ajax.NET.dll
-C:\Mehul\rnd\Ajax.Net\bin\Debug\Ajax.NET.pdb
-C:\Mehul\rnd\Ajax.Net\obj\Debug\Ajax.NET.csprojAssemblyReference.cache
-C:\Mehul\rnd\Ajax.Net\obj\Debug\Ajax.NET.dll
-C:\Mehul\rnd\Ajax.Net\obj\Debug\Ajax.NET.pdb

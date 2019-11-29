@@ -1,5 +1,0 @@
-E:\e\R&D\myajax_library\SmartAjax\bin\Release\Ajax.dll
-E:\e\R&D\myajax_library\SmartAjax\bin\Release\Ajax.pdb
-E:\e\R&D\myajax_library\SmartAjax\obj\Release\Ajax.dll
-E:\e\R&D\myajax_library\SmartAjax\obj\Release\Ajax.pdb
-E:\e\R&D\myajax_library\SmartAjax\obj\Release\SmartAjax.csprojResolveAssemblyReference.cache

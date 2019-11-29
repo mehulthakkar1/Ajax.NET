@@ -18,28 +18,28 @@ namespace Ajax.NET
 
         public string CallBackMethodName { get; set; }
 
-        public AjaxMethodAttribute(string methodName, bool isCallBackRequired, bool isErrorRequired, string LoadingMessage = "", bool isAsync = true)
+        public AjaxMethodAttribute(string methodName, bool isCallBackRequired, bool isErrorRequired, string loadingMessage = "", bool isAsync = true)
         {
             MethodName = methodName;
             IsCallBackRequired = isCallBackRequired;
             IsErrorRequired = isErrorRequired;
-            this.LoadingMessage = LoadingMessage;
+            LoadingMessage = loadingMessage;
             IsAsync = isAsync;
         }
 
-        public AjaxMethodAttribute(string methodName, string CallBackMethodName, string ErrorMethodName, string LoadingMessage, bool isAsync = true)
+        public AjaxMethodAttribute(string methodName, string callBackMethodName, string errorMethodName, string loadingMessage, bool isAsync = true)
         {
             MethodName = methodName;
-            if ((CallBackMethodName != null))
+            if ((callBackMethodName != null))
             {
-                this.CallBackMethodName = CallBackMethodName;
+                CallBackMethodName = callBackMethodName;
             }
 
-            if ((ErrorMethodName != null))
+            if ((errorMethodName != null))
             {
-                this.ErrorMethodName = ErrorMethodName;
+                ErrorMethodName = errorMethodName;
             }
-            this.LoadingMessage = LoadingMessage;
+            LoadingMessage = loadingMessage;
             IsAsync = isAsync;
         }
 

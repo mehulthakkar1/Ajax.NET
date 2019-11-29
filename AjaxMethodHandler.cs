@@ -125,35 +125,35 @@ namespace Ajax.NET
                     {
                         return new Guid(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(int)) || object.ReferenceEquals(paramType, typeof(Nullable<int>)))
+                    else if (object.ReferenceEquals(paramType, typeof(int)) || object.ReferenceEquals(paramType, typeof(int?)))
                     {
                         return Convert.ToInt32(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(short)) || object.ReferenceEquals(paramType, typeof(Nullable<short>)))
+                    else if (object.ReferenceEquals(paramType, typeof(short)) || object.ReferenceEquals(paramType, typeof(short?)))
                     {
                         return Convert.ToInt16(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(long)) || object.ReferenceEquals(paramType, typeof(Nullable<long>)))
+                    else if (object.ReferenceEquals(paramType, typeof(long)) || object.ReferenceEquals(paramType, typeof(long?)))
                     {
                         return Convert.ToInt64(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(ushort)) || object.ReferenceEquals(paramType, typeof(Nullable<ushort>)))
+                    else if (object.ReferenceEquals(paramType, typeof(ushort)) || object.ReferenceEquals(paramType, typeof(ushort?)))
                     {
                         return Convert.ToUInt16(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(uint)) || object.ReferenceEquals(paramType, typeof(Nullable<uint>)))
+                    else if (object.ReferenceEquals(paramType, typeof(uint)) || object.ReferenceEquals(paramType, typeof(uint?)))
                     {
                         return Convert.ToUInt32(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(ulong)) || object.ReferenceEquals(paramType, typeof(Nullable<ulong>)))
+                    else if (object.ReferenceEquals(paramType, typeof(ulong)) || object.ReferenceEquals(paramType, typeof(ulong?)))
                     {
                         return Convert.ToUInt64(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(double)) || object.ReferenceEquals(paramType, typeof(Nullable<double>)))
+                    else if (object.ReferenceEquals(paramType, typeof(double)) || object.ReferenceEquals(paramType, typeof(double?)))
                     {
                         return Convert.ToDouble(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(decimal)) || object.ReferenceEquals(paramType, typeof(Nullable<decimal>)))
+                    else if (object.ReferenceEquals(paramType, typeof(decimal)) || object.ReferenceEquals(paramType, typeof(decimal?)))
                     {
                         return Convert.ToDecimal(rMatch.Groups["Value"].Value);
                     }
@@ -161,7 +161,7 @@ namespace Ajax.NET
                     {
                         return Convert.ToDateTime(rMatch.Groups["Value"].Value);
                     }
-                    else if (object.ReferenceEquals(paramType, typeof(bool)) || object.ReferenceEquals(paramType, typeof(Nullable<bool>)))
+                    else if (object.ReferenceEquals(paramType, typeof(bool)) || object.ReferenceEquals(paramType, typeof(bool?)))
                     {
                         return Convert.ToBoolean(rMatch.Groups["Value"].Value);
                     }
