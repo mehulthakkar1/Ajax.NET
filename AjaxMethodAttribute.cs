@@ -18,6 +18,8 @@ namespace Ajax.NET
 
         public string CallBackMethodName { get; set; }
 
+        public bool ReturnPromise { get; set; }
+
         public AjaxMethodAttribute(string methodName, bool isCallBackRequired, bool isErrorRequired, string loadingMessage = "", bool isAsync = true)
         {
             MethodName = methodName;
@@ -43,15 +45,17 @@ namespace Ajax.NET
             IsAsync = isAsync;
         }
 
-        public AjaxMethodAttribute(string methodName, bool isAsync = true)
+        public AjaxMethodAttribute(string methodName, bool isAsync = true, bool returnPromise = false)
         {
             MethodName = methodName;
             IsAsync = isAsync;
+            ReturnPromise = returnPromise;
         }
 
-        public AjaxMethodAttribute(bool isAsync = true)
+        public AjaxMethodAttribute(bool isAsync = true, bool returnPromise = false)
         {
             IsAsync = isAsync;
+            ReturnPromise = returnPromise;
         }
     }
 }

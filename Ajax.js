@@ -81,7 +81,7 @@ function AjaxMethod() {
             }
             catch (e) { ShowLoading(true, command["LoadingMsg"]); }
         }
-        this.xmlHttp.onreadystatechange = function () { _this.stateChange() };
+        this.xmlHttp.onreadystatechange = function () { _this.stateChange(command["onSuccess"], command["onError"]) };
         var url = this.Url + "?d=" + Date.parse(new Date());
         this.xmlHttp.open("POST", url, this.async);
         this.xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -148,7 +148,7 @@ function AjaxMethod() {
         }
         return null;
     };
-    this.stateChange = function () {
+    this.stateChange = function (onSuccess, onError) {
         
         try {
 
@@ -156,9 +156,9 @@ function AjaxMethod() {
                 return;
             }
             if (this.xmlHttp.status == 200) {
-                this.executeMethod(this.CallBack);
+                this.executeMethod(onSuccess || this.CallBack);
             } else {
-                this.executeMethod(this.Error);
+                this.executeMethod(onError || this.Error);
             }
         }
         catch (e) {
@@ -175,8 +175,13 @@ function AjaxMethod() {
                 this.Result = eval("o='" + this.xmlHttp.responseText + "';");
             }
             this.xmlHttp.abort();
-            if (this.async)
-                eval(methodname + ("(o);"));
+            if (this.async) {
+                if (methodname.constructor === String) {
+                    eval(methodname + ("(o);"));
+                } else {
+                    methodname(this.Result);
+                }
+            }
         }
 
     };

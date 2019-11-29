@@ -111,7 +111,14 @@ namespace Ajax.NET
 
                         sb.Append("){");
                         i = 0;
-                        sb.Append("return " + "ajaxMethod.invokeAjax('" + methodinfo.Name + "',{");
+                        if (!ma[0].ReturnPromise)
+                        {
+                            sb.Append("return ajaxMethod.invokeAjax('" + methodinfo.Name + "',{");
+                        }
+                        else
+                        {
+                            sb.Append("return new Promise(function(resolve, reject) { ajaxMethod.invokeAjax('" + methodinfo.Name + "',{");
+                        }
                         foreach (var par in pi)
                         {
                             sb.Append("'" + par.Name + "':" + par.Name);
@@ -127,7 +134,17 @@ namespace Ajax.NET
                             sb.Append("'CallBack':'" + callbackMethodName + "','Error':'" + errorMethodName + "',");
                         if (loadingMsg != null && loadingMsg.Trim() != string.Empty)
                             sb.Append("'LoadingMsg':'" + loadingMsg + "',");
-                        sb.Append("'IsAsync':" + isAsync.ToString().ToLower() + "});");
+                        sb.Append("'IsAsync':" + isAsync.ToString().ToLower());
+                        if (!ma[0].ReturnPromise)
+                        {
+                            sb.Append("});");//close invokeajax
+                        }
+                        else
+                        {
+                            sb.Append(", 'onSuccess': resolve, 'onError': reject");
+                            sb.Append("})});"); //close promise
+                        }
+                        
                         sb.Append("};");
                     }
 
