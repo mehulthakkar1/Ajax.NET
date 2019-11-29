@@ -1,36 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
 using System.IO;
+using System.Web;
 
-namespace Ajax
+namespace Ajax.NET
 {
-    class AjaxHandlerFactory : IHttpHandlerFactory
+    internal class AjaxHandlerFactory : IHttpHandlerFactory
     {
-        
-
         public IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
         {
-            string fName = Path.GetFileNameWithoutExtension(context.Request.Path);
-            Type ClassType = null;
-            string MethodName = string.Empty;
+            var fName = Path.GetFileNameWithoutExtension(context.Request.Path);
+            var methodName = string.Empty;
             if (fName.Substring(fName.Length - 6) == "__ajax" & (requestType.ToUpper() == "POST" | requestType.ToUpper() == "GET"))
             {
                 try
                 {
                     fName = fName.Substring(0, fName.Length - 6);
-                    MethodName = context.Request.Headers["AJAX-METHOD"];
+                    methodName = context.Request.Headers["AJAX-METHOD"];
                 }
                 catch (Exception ex)
                 {
-                    MethodName = string.Empty;
+                    methodName = string.Empty;
                 }
-                ClassType = Type.GetType(fName);
-                if (MethodName != null)
+                var classType = Type.GetType(fName);
+                if (methodName != null)
                 {
-                    AjaxMethodHandler objMethodHandler = new AjaxMethodHandler(ClassType, MethodName);
+                    AjaxMethodHandler objMethodHandler = new AjaxMethodHandler(classType, methodName);
                     return (IHttpHandler)objMethodHandler;
                 }
                 else
@@ -42,10 +36,10 @@ namespace Ajax
                     }
                     else
                     {
-                        ClassType = Type.GetType(fName);
-                        if ((ClassType != null))
+                        classType = Type.GetType(fName);
+                        if ((classType != null))
                         {
-                            AjaxJavaScriptHandler objJsHandler = new AjaxJavaScriptHandler(ClassType);
+                            AjaxJavaScriptHandler objJsHandler = new AjaxJavaScriptHandler(classType);
                             return objJsHandler;
                         }
                         else

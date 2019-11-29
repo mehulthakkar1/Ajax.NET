@@ -1,35 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.SessionState;
 
-namespace Ajax
+namespace Ajax.NET
 {
     public class AjaxMethodHandler : IHttpHandler, IRequiresSessionState
     {
-        private Type _classType;
+        public Type ClassType { get; }
 
-        private string _methodName;
-        public Type ClassType
-        {
-            get { return _classType; }
-        }
-
-        public string MethodName
-        {
-            get { return _methodName; }
-            set { _methodName = value; }
-        }
+        public string MethodName { get; set; }
 
         public AjaxMethodHandler(Type classType, string methodName)
         {
-            _classType = classType;
-            _methodName = methodName;
+            ClassType = classType;
+            MethodName = methodName;
         }
 
         public bool IsReusable
@@ -37,25 +27,24 @@ namespace Ajax
             get { return false; }
         }
 
-        public void ProcessRequest(System.Web.HttpContext context)
+        public void ProcessRequest(HttpContext context)
         {
             object res = null;
-            int i = 0;
-            System.Reflection.MethodInfo methodinfo = ClassType.GetMethod(MethodName);
-            System.Reflection.ParameterInfo[] @params = methodinfo.GetParameters();
-            object[] args = new object[@params.Length];
+            var i = 0;
+            var methodinfo = ClassType.GetMethod(MethodName);
+            var parameters = methodinfo.GetParameters();
+            var args = new object[parameters.Length];
 
-            foreach (System.Reflection.ParameterInfo param in @params)
+            foreach (var param in parameters)
             {
-                args[i] = param.DefaultValue;
-                i = i + 1;
+                args[i++] = param.DefaultValue;
             }
 
             i = 0;
 
             if (context.Request.RequestType.ToUpper() == "POST")
             {
-                foreach (System.Reflection.ParameterInfo param in @params)
+                foreach (ParameterInfo param in parameters)
                 {
                     if ((context.Request.Form[param.Name] != null))
                     {
@@ -66,7 +55,7 @@ namespace Ajax
             }
             else if (context.Request.RequestType.ToUpper() == "GET")
             {
-                foreach (System.Reflection.ParameterInfo param in @params)
+                foreach (ParameterInfo param in parameters)
                 {
                     if ((context.Request.QueryString[param.Name] != null))
                     {
@@ -113,13 +102,10 @@ namespace Ajax
 
         public object Deserialize(object obj, Type paramType = null)
         {
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
-            System.Text.RegularExpressions.Regex rObj = null;
-            System.Text.RegularExpressions.Match rMatch = null;
-
-            rObj = new System.Text.RegularExpressions.Regex("^(?<Value>(True|False))$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            rMatch = rObj.Match(obj.ToString());
+            var rObj = new Regex("^(?<Value>(True|False))$", RegexOptions.IgnoreCase);
+            var rMatch = rObj.Match(obj.ToString());
 
             if (rMatch.Success)
             {
@@ -127,7 +113,7 @@ namespace Ajax
             }
             else
             {
-                rObj = new System.Text.RegularExpressions.Regex("^('(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\"'|~`<>?/{}\\s]{1,20000000})'|(?<Value>[0-9.]{1,20000000}))$");
+                rObj = new Regex("^('(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\"'|~`<>?/{}\\s]{1,20000000})'|(?<Value>[0-9.]{1,20000000}))$");
                 rMatch = rObj.Match(obj.ToString());
                 if (rMatch.Success)
                 {
@@ -186,17 +172,16 @@ namespace Ajax
                 }
                 else
                 {
-                    rObj = new System.Text.RegularExpressions.Regex("^\\[(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",'|~`<>?/{}\\s]*)\\]$");
+                    rObj = new Regex("^\\[(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",'|~`<>?/{}\\s]*)\\]$");
                     rMatch = rObj.Match(obj.ToString());
-
-
+                    
                     if (rMatch.Success)
                     {
                         string[] arr = rMatch.Groups["Value"].Value.Split(',');
                         Array returnArr = null;
                         if (arr.Length > 0)
                         {
-                            System.Collections.ArrayList sArr = new System.Collections.ArrayList();
+                            var sArr = new ArrayList();
                             foreach (string d in arr)
                             {
                                 sArr.Add(Deserialize(d, d.GetType()));
@@ -208,19 +193,18 @@ namespace Ajax
                     }
                     else
                     {
-                        rObj = new System.Text.RegularExpressions.Regex("^\\{(?<Value>[\"][a-zA-Z0-9]*[\"][:][']?[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]*[']?[,]?)+\\}$");
+                        rObj = new Regex("^\\{(?<Value>[\"][a-zA-Z0-9]*[\"][:][']?[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]*[']?[,]?)+\\}$");
                         rMatch = rObj.Match(obj.ToString());
                         if (rMatch.Success)
                         {
                             object o = Activator.CreateInstance(paramType);
-                            rObj = new System.Text.RegularExpressions.Regex("([\"][a-zA-Z0-9]+[\"][:]['][a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]+[']|[\"][a-zA-Z0-9]+[\"][:][0-9.]+)");
-                            System.Text.RegularExpressions.MatchCollection rMatches = null;
-                            rMatches = rObj.Matches(obj.ToString());
-                            foreach (System.Text.RegularExpressions.Match rMatch_loopVariable in rMatches)
+                            rObj = new Regex("([\"][a-zA-Z0-9]+[\"][:]['][a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]+[']|[\"][a-zA-Z0-9]+[\"][:][0-9.]+)");
+                            var rMatches = rObj.Matches(obj.ToString());
+                            foreach (Match rMatch_loopVariable in rMatches)
                             {
                                 rMatch = rMatch_loopVariable;
-                                rObj = new System.Text.RegularExpressions.Regex("[\"](?<Prop>[a-zA-Z0-9]+)[\"][:][']?(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]+)[']?");
-                                System.Text.RegularExpressions.Match rMatchProp = rObj.Match(rMatch.Value);
+                                rObj = new Regex("[\"](?<Prop>[a-zA-Z0-9]+)[\"][:][']?(?<Value>[a-zA-Z0-9\\-.,!@#$%^&*()_+;:\",|~`<>?/{}\\s]+)[']?");
+                                var rMatchProp = rObj.Match(rMatch.Value);
                                 try
                                 {
                                     if (rMatchProp.Success)
@@ -250,13 +234,13 @@ namespace Ajax
 
         public string Serialize(object obj)
         {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
 
             if (obj == null)
             {
                 return "null";
             }
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
             if (object.ReferenceEquals(objType, typeof(string)))
             {
@@ -406,18 +390,17 @@ namespace Ajax
             }
             else if (objType.IsGenericType && objType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
             {
-                PropertyInfo key = objType.GetProperty("Key");
-                PropertyInfo value = objType.GetProperty("Value");
+                var key = objType.GetProperty("Key");
+                var value = objType.GetProperty("Value");
                 object keyObj = key.GetValue(obj, null);
                 object valueObj = value.GetValue(obj, null);
                 sb.Append(keyObj.ToString() + ":" + Serialize(valueObj));
             }
             else if (objType.IsClass)
             {
-
-                int i = 0;
-                System.Reflection.FieldInfo[] fields = objType.GetFields(BindingFlags.Public);
-                System.Reflection.PropertyInfo[] Props = objType.GetProperties();
+                var i = 0;
+                var fields = objType.GetFields(BindingFlags.Public);
+                var Props = objType.GetProperties();
 
                 sb.Append("{");
                 sb.Append("type:'" + objType.Name + "'");
@@ -425,7 +408,7 @@ namespace Ajax
                 {
                     sb.Append(",");
                 }
-                foreach (System.Reflection.FieldInfo field in fields)
+                foreach (var field in fields)
                 {
                     if (i > 0)
                         sb.Append(",");
@@ -434,9 +417,9 @@ namespace Ajax
                 }
 
                 int j = 0;
-                foreach (System.Reflection.PropertyInfo prop in Props)
+                foreach (var prop in Props)
                 {
-                    System.Reflection.MethodInfo mi = prop.GetGetMethod();
+                    var mi = prop.GetGetMethod();
                     if (i > 0)
                     {
                         sb.Append(",");
@@ -457,20 +440,9 @@ namespace Ajax
     }
 }
 
-
 class CallBackError
 {
-    private int _ErrNum;
-    private string _ErrMsg;
-    public int ErrNum
-    {
-        get { return _ErrNum; }
-        set { _ErrNum = value; }
-    }
-    public string ErrMsg
-    {
-        get { return _ErrMsg; }
-        set { _ErrMsg = value; }
-    }
+    public int ErrNum { get; set; }
+    public string ErrMsg { get; set; }
 }
 
