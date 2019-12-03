@@ -34,11 +34,11 @@ namespace Ajax.NET
 
             if (HttpContext.Current.Request.ApplicationPath != "/")
             {
-                strURL = "'" + HttpContext.Current.Request.ApplicationPath + "/" + path + Utility.HandlerExtention + "'";
+                strURL = "'" + HttpContext.Current.Request.ApplicationPath + "/" + path + Extention.OfHandler + "'";
             }
             else
             {
-                strURL = "'" + path + Utility.HandlerExtention + "'";
+                strURL = "'" + path + Extention.OfHandler + "'";
             }
 
             sb.Append("ajaxMethod.initialize(" + strURL + ");");
@@ -130,7 +130,7 @@ namespace Ajax.NET
                         }
                         sb.Append("},");
                         sb.Append("{");
-                        if (isAsync)
+                        if (isAsync && !ma[0].ReturnPromise)
                             sb.Append("'CallBack':'" + callbackMethodName + "','Error':'" + errorMethodName + "',");
                         if (loadingMsg != null && loadingMsg.Trim() != string.Empty)
                             sb.Append("'LoadingMsg':'" + loadingMsg + "',");
