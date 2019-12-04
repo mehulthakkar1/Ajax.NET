@@ -82,10 +82,10 @@ function AjaxMethod() {
             catch (e) { ShowLoading(true, command["LoadingMsg"]); }
         }
         this.xmlHttp.onreadystatechange = function () { _this.stateChange(command["onSuccess"], command["onError"]) };
-        var url = this.Url + "?d=" + Date.parse(new Date());
-        this.xmlHttp.open("POST", url, this.async);
+        var url = this.Url + (command["isController"] ? "/" + methodName : "") + "?d=" + Date.parse(new Date());
+        this.xmlHttp.open(command["httpVerb"] || "POST", url, this.async);
         this.xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        if (methodName != "") {
+        if (methodName != "" && !command["isController"]) {
             this.xmlHttp.setRequestHeader("AJAX-METHOD", methodName);
         }
 
