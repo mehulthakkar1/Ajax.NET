@@ -71,6 +71,7 @@
     <Compile Include="AjaxJs.cs" />
     <Compile Include="AjaxMethodAttribute.cs" />
     <Compile Include="AjaxMethodHandler.cs" />
+    <Compile Include="HtmlHelperExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts.cs" />
   </ItemGroup>
