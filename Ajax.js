@@ -82,10 +82,19 @@ function AjaxMethod() {
             catch (e) { ShowLoading(true, command["LoadingMsg"]); }
         }
         this.xmlHttp.onreadystatechange = function () { _this.stateChange(command["onSuccess"], command["onError"]) };
-        var url = this.Url + (command["isController"] ? "/" + methodName : "") + "?d=" + Date.parse(new Date());
+        var buildUrl = function () {
+            var url = _this.Url + (command["ControllerType"] == "Mvc" ? "/" + methodName : "");
+            if (methodName != "" && command["ControllerType"] != "") {
+                url += "/";
+            }
+            url += (command["ControllerType"] != "Mvc" ? "?d=" + Date.parse(new Date()) : "");
+            return url;
+        };
+        var url = buildUrl();
         this.xmlHttp.open(command["httpVerb"] || "POST", url, this.async);
         this.xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        if (methodName != "" && !command["isController"]) {
+
+        if (methodName != "" && !command["ControllerType"]) {
             this.xmlHttp.setRequestHeader("AJAX-METHOD", methodName);
         }
 
@@ -100,10 +109,41 @@ function AjaxMethod() {
             sendStr += prop + "=" + serialize(o);
             i++;
         }
-        try { this.xmlHttp.send(sendStr); }
-        catch (e) { }
+        try
+        {
+            this.xmlHttp.send(sendStr);
+        }
+        catch (e) {
+            console.log(e);
+        }
         if (!this.async)
             return this.Result;
+    };
+
+    this.invokeWebApi = function (methodName, command, urlArgs, bodyArgs) {    
+         var _this = this;
+
+        this.xmlHttp.onreadystatechange = function () { _this.stateChange(command["onSuccess"], command["onError"]) };
+        var buildUrl = function () {
+            var url = _this.Url + "/" + methodName;
+            if (methodName != "") {
+                url += "/";
+            }
+            for (prop in urlArgs) {
+                url += urlArgs[prop] + "/";
+            }
+            return url;
+        };
+        var url = buildUrl();
+        this.xmlHttp.open(command["httpVerb"], url, true);
+        this.xmlHttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+     
+        try {
+            this.xmlHttp.send(JSON.stringify(bodyArgs));
+        }
+        catch (e) {
+            console.log(e);
+        }
     };
 
     function serialize(obj) {
