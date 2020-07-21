@@ -23,7 +23,7 @@ namespace Ajax.NET
         {
             var lastMod = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             var scripts = Scripts.Generate(ClassType);
-            context.Response.AddHeader("Content-Type", "applicatoin/x-javascript");
+            context.Response.AddHeader("Content-Type", "application/x-javascript");
             context.Response.ContentEncoding = Encoding.UTF8;
             context.Response.Cache.SetLastModified(lastMod);
             context.Response.Write(scripts);
