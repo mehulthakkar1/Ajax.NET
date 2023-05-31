@@ -1,4 +1,4 @@
-# Ajax.NET
+# Ajax Library
 A dll to auto generate ajax methods on client
 
 For example please have a look into this link -> 
